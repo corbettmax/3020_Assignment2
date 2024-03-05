@@ -3,18 +3,20 @@ using System;
 
 public class Rope {
 
-    private class Node<T> where T : IComparable
+
+    private class Node
     {
         // Read/write properties
 
-        public string s { get; set; }
-        public Node<T>? Left { get; set; }
-        public Node<T>? Right { get; set; }
+        public string s { get; set; } //only for leaf nodes
+        public int length { get; set; } //augmented data
+        public Node left { get; set; }
+        public Node right { get; set; }
 
-        public Node(T item)
+        public Node(int len, string str = null)
         {
-            Item = item;
-            Left = Right = null;
+            length = len;
+            s = str;
         }
     }
 
@@ -22,8 +24,43 @@ public class Rope {
 
     public Rope(string S)
     {
+        root = new Node(S.Length);
+
+        //split the string in half (ask if this is the right way to do it)
+        string firstHalf = S.Substring(0, Math.Floor(root.length / 2) - 1);
+        string secondHalf = S.Substring(Math.Floor(root.length / 2) - 1, root.length - 1);
+
+        root.left = Build(firstHalf, 0, Math.Floor(root.length / 2));
+
+        root.right = Build(secondHalf, Math.Floor(root.length / 2), root.length);
+
 
     }//: Create a balanced rope from a given string S (5 marks).
+
+
+    private Node Build(string s, int i, int j)
+    {
+        if (j - i <= 10) 
+        {
+            return new Node(j - i, s);
+        }
+
+        Node n = new Node(j - i);
+
+        string firstHalf = s.Substring(0, Math.Floor(n.length / 2) - 1);
+        string secondHalf = s.Substring(Math.Floor(n.length / 2) - 1, n.length - 1);
+
+        n.left = Build(firstHalf, i, Math.Floor(j/2));
+        n.right = Build(secondHalf, Math.Floor(i/2), j);
+
+        n.length = n.left.length + n.right.length;
+
+        return n;
+
+    } //: Recursively build a balanced rope for S[i, j] and return its root
+    //(part of the constructor).
+
+
     public void Insert(string S, int i)
     {
 
@@ -65,11 +102,7 @@ public class Rope {
 
     }//: Print the augmented binary tree of the current rope (4 marks).
     //The public methods are strongly supported by the following (and indispensible) private methods.
-    private Node Build(string s, int i, int j)
-    {
-
-    } //: Recursively build a balanced rope for S[i, j] and return its root
-    //(part of the constructor).
+    
     private Node Concatenate(Node p, Node q)  //: Return the root of the rope constructed by concatenating tworopes with roots p and q (3 marks).
     {
         
