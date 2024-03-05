@@ -77,40 +77,73 @@ public class Rope {
     {
 
     }//: Return the index of the first occurrence of S; -1 otherwise(9 marks).
+    
     public char CharAt(int i)  //: Return the character at index i (3 marks).
     {
+        Node current = root;
+        int currIndex = i
+
+        while (current.length > 10)
+        {
+            if (i >current.left.length)
+            {
+                currIndex = currIndex - current.left.length;
+                current = current.right;
+            }
+            else
+            {
+                current = current.left;
+            }
+        }
+
+        return current.s[currIndex];
 
     }
+
     public int IndexOf(char c)
     {
 
     }//: Return the index of the first occurrence of character c (4 marks).
+
     public void Reverse()
     {
 
     }//: Reverse the string represented by the current rope (5 marks).
+
     public int Length()
     {
+        return root.length;
 
     }//: Return the length of the string (1 mark).
+
     public string ToString()
     {
 
     }//: Return the string represented by the current rope (4 marks).
+    
     public void PrintRope()
     {
 
     }//: Print the augmented binary tree of the current rope (4 marks).
+
+
+
     //The public methods are strongly supported by the following (and indispensible) private methods.
-    
     private Node Concatenate(Node p, Node q)  //: Return the root of the rope constructed by concatenating tworopes with roots p and q (3 marks).
     {
+        Node n = new Node(p.length + q.length);
+        n.right = q;
+        n.left = p;
+
+        return n;
         
     }
+    
     private Node Split(Node p, int i)
     {
 
     } //: Split the rope with root p at index i and return the root of the right subtree(9 marks).
+    
     private Node Rebalance()
     {
 
