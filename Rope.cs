@@ -1,5 +1,6 @@
 ﻿using System.Xml.Linq;
 using System;
+using System.Collections
 
 public class Rope {
 
@@ -69,10 +70,12 @@ public class Rope {
     {
 
     } //: Delete the substring S[i, j] (5 marks).
+
     public string Substring(int i, int j)
     {
 
     } //: Return the substring S[i, j] (6 marks).
+
     public int Find(string S)
     {
 
@@ -102,6 +105,34 @@ public class Rope {
 
     public int IndexOf(char c)
     {
+        Stack stacky = new Stack();
+        int currIndex = 0;
+
+        stacky.Push(root);
+
+        while ((Node curr = stacky.Pop()) != null )
+        {
+            if(curr.s==null)
+            {
+                stacky.Push(curr.right);
+                stacky.Push(curr.left);
+            }
+            else
+            {
+                int i = 0
+                for(i; i<curr.length; i++)
+                {
+                    if (s[i]==c)
+                    {
+                        return currIndex + i;
+                    }
+                }
+                currIndex += i;
+            }
+        }
+
+        return null;
+        
 
     }//: Return the index of the first occurrence of character c (4 marks).
 
@@ -118,13 +149,48 @@ public class Rope {
 
     public string ToString()
     {
+        Stack stacky = new Stack();
+        string toReturn = "";
+
+        stacky.Push(root);
+
+        while ((Node curr = stacky.Pop()) != null )
+        {
+            if (curr.s == null)
+            {
+                stacky.Push(curr.right);
+                stacky.Push(curr.left);
+            }
+            else
+            {
+                toReturn += curr.s;
+            }
+        }
 
     }//: Return the string represented by the current rope (4 marks).
     
     public void PrintRope()
     {
+        PrintRope(root, 0);
 
     }//: Print the augmented binary tree of the current rope (4 marks).
+
+    private void PrintRope(Node n, int index)
+    {
+        if (n != null)
+        {
+            PrintRope(n.right, index + 8);
+            if(n.s != null)
+            {
+                Console.WriteLine(new String(' ', index) + n.length.ToString() + " ";
+            }
+            else
+            {
+                Console.WriteLine(new String(' ', index) + n.s + " ";
+            }
+            PrintRope(n.left, index + 8);
+        }
+    }
 
 
 
