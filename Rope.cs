@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 using System;
 using System.Collections;
+using System.Reflection.Emit;
 
 namespace Assn2 {
     public class Rope {
@@ -148,6 +149,39 @@ namespace Assn2 {
 
         public void Reverse()
         {
+            Stack<Node> stacky = new Stack<Node>();
+            Node temp;
+            Node curr;
+
+            stacky.Push(root);
+
+            while (stacky.Count > 0)
+            {
+                curr = stacky.Pop();
+
+                if (curr.s == null)
+                {
+                    temp = curr.left;
+                    curr.left = curr.right;
+                    curr.right = temp;
+
+                    stacky.Push(curr.left);
+                    stacky.Push(curr.right);
+                }
+                else
+                {
+                    string newStr = "";
+                    for (int i = curr.s.Length - 1; i > -1; i--)
+                    {
+                        newStr += curr.s[i];
+                    }
+
+                    curr.s = newStr;
+                    
+                }
+
+            }
+            return;
 
         }//: Reverse the string represented by the current rope (5 marks).
 
@@ -228,6 +262,31 @@ namespace Assn2 {
 
         private Node Rebalance()
         {
+            /*Stack<Node> stacky = new Stack<Node>();
+            int depth = 1;
+            int ab = 0;
+
+            stacky.Push(root);
+
+            Node curr;
+
+            while (stacky.Count > 0)
+            {
+                curr = stacky.Pop();
+                if (curr.s == null)
+                {
+                    stacky.Push(curr.right);
+                    stacky.Push(curr.left);
+                    
+                }
+                else
+                {
+                    
+                    
+                }
+
+            }*/
+
             return null;
         }//: Rebalance the rope  using the algorithm found on pages 1319-1320 of Boehm et al.(9 marks).
     }
