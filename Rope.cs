@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 using System;
-using System.Collections
+using System.Collections;
 
 namespace Assn2 {
     public class Rope {
@@ -27,14 +27,15 @@ namespace Assn2 {
         public Rope(string S)
         {
             root = new Node(S.Length);
+            double floored = root.length / 2;
 
             //split the string in half (ask if this is the right way to do it)
-            string firstHalf = S.Substring(0, Math.Floor(root.length / 2) - 1);
-            string secondHalf = S.Substring(Math.Floor(root.length / 2) - 1, root.length - 1);
+            string firstHalf = S.Substring(0, Convert.ToInt32(Math.Floor(floored)));
+            string secondHalf = S.Substring(Convert.ToInt32(Math.Floor(floored)));
 
-            root.left = Build(firstHalf, 0, Math.Floor(root.length / 2));
+            root.left = Build(firstHalf, 0, Convert.ToInt32(Math.Floor(floored)));
 
-            root.right = Build(secondHalf, Math.Floor(root.length / 2), root.length);
+            root.right = Build(secondHalf, Convert.ToInt32(Math.Floor(floored)), root.length);
 
 
         }//: Create a balanced rope from a given string S (5 marks).
@@ -49,13 +50,14 @@ namespace Assn2 {
 
             Node n = new Node(j - i);
 
-            string firstHalf = s.Substring(0, Math.Floor(n.length / 2) - 1);
-            string secondHalf = s.Substring(Math.Floor(n.length / 2) - 1, n.length - 1);
+            double floored = n.length / 2;
 
-            n.left = Build(firstHalf, i, Math.Floor(j / 2));
-            n.right = Build(secondHalf, Math.Floor(i / 2), j);
 
-            n.length = n.left.length + n.right.length;
+            string firstHalf = s.Substring(0, Convert.ToInt32(Math.Floor(floored)));
+            string secondHalf = s.Substring(Convert.ToInt32(Math.Floor(floored)));
+
+            n.left = Build(firstHalf, 0, Convert.ToInt32(Math.Floor(floored)));
+            n.right = Build(secondHalf, Convert.ToInt32(Math.Floor(floored)), n.length);
 
             return n;
 
@@ -74,7 +76,7 @@ namespace Assn2 {
 
         public string Substring(int i, int j)
         {
-
+            return "";
         } //: Return the substring S[i, j] (6 marks).
 
         public int Find(string S)
@@ -83,14 +85,14 @@ namespace Assn2 {
 
             if (len > root.length) return -1;
 
-
+            return -1;
 
         }//: Return the index of the first occurrence of S; -1 otherwise(9 marks).
 
         public char CharAt(int i)  //: Return the character at index i (3 marks).
         {
             Node current = root;
-            int currIndex = i
+            int currIndex = i;
     
         while (current.length > 10)
             {
@@ -111,12 +113,13 @@ namespace Assn2 {
 
         public int IndexOf(char c)
         {
-            Stack stacky = new Stack();
+            Stack<Node> stacky = new Stack<Node>();
             int currIndex = 0;
 
             stacky.Push(root);
+            Node curr = stacky.Pop();
 
-            while ((Node curr = stacky.Pop()) != null )
+            while (curr  != null )
         {
                 if (curr.s == null)
                 {
@@ -125,19 +128,20 @@ namespace Assn2 {
                 }
                 else
                 {
-                    int i = 0
-                    for (i; i < curr.length; i++)
+                    int i;
+                    for (i=0; i < curr.length; i++)
                     {
-                        if (s[i] == c)
+                        if (curr.s[i] == c)
                         {
                             return currIndex + i;
                         }
                     }
                     currIndex += i;
                 }
+                curr = stacky.Pop();
             }
 
-            return null;
+            return -1;
 
 
         }//: Return the index of the first occurrence of character c (4 marks).
@@ -155,13 +159,16 @@ namespace Assn2 {
 
         public string ToString()
         {
-            Stack stacky = new Stack();
+            Stack<Node> stacky = new Stack<Node>();
             string toReturn = "";
 
             stacky.Push(root);
 
-            while ((Node curr = stacky.Pop()) != null )
-        {
+            Node curr;
+
+            while (stacky.Count > 0 )
+            {
+                curr = stacky.Pop();
                 if (curr.s == null)
                 {
                     stacky.Push(curr.right);
@@ -171,7 +178,10 @@ namespace Assn2 {
                 {
                     toReturn += curr.s;
                 }
+                
             }
+
+            return toReturn;
 
         }//: Return the string represented by the current rope (4 marks).
 
@@ -186,13 +196,13 @@ namespace Assn2 {
             if (n != null)
             {
                 PrintRope(n.right, index + 8);
-                if (n.s != null)
+                if (n.s == null)
                 {
-                    Console.WriteLine(new String(' ', index) + n.length.ToString() + " ";
+                    Console.WriteLine(new String(' ', index) + n.length.ToString() + " ");
                 }
                 else
                 {
-                    Console.WriteLine(new String(' ', index) + n.s + " ";
+                    Console.WriteLine(new String(' ', index) + n.s + " ");
                 }
                 PrintRope(n.left, index + 8);
             }
@@ -213,12 +223,12 @@ namespace Assn2 {
 
         private Node Split(Node p, int i)
         {
-
+            return null;
         } //: Split the rope with root p at index i and return the root of the right subtree(9 marks).
 
         private Node Rebalance()
         {
-
+            return null;
         }//: Rebalance the rope  using the algorithm found on pages 1319-1320 of Boehm et al.(9 marks).
     }
 }
