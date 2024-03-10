@@ -23,6 +23,10 @@ namespace Assn2
             ropey.Reverse();
             Console.WriteLine(ropey.ToString());
 
+            //Test Concatenate/rebalance
+            Rope ropey2 = new Rope("_Just_concatenating_this");
+            
+
 
             Console.ReadLine();
         }

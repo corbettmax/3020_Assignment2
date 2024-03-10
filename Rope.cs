@@ -262,13 +262,43 @@ namespace Assn2 {
 
         private Node Rebalance()
         {
-            /*Stack<Node> stacky = new Stack<Node>();
-            int depth = 1;
-            int ab = 0;
+            // The basic rebalancing algorithm is add nodes to a rabalance array, where a node at index K in the 
+            // rebalance array has Fibonacci(K+1) to Fibonacci(K+2) items, and the entire list has the nodes
+            // from largest to smallest concatenated.
 
+            // create the aarray of nodes with length of the fibonacci numbers
+            int slots = 0;
+            List<Node> fibonacci = new List<Node>();
+            fibonacci.Add(new Node(1));
+            fibonacci.Add(new Node(2));
+            while (true)
+            {
+                if (root.length < fibonacci[slots].length)
+                {
+                    break;
+                }
+                slots++;
+                if(slots < 2)
+                {
+                    /*already added first two fibonacci numbers, 
+                     * since algorithm uses fibonacci sequence that starts at 
+                     * the second fibonacci number and therefore isn't calculated the
+                     * same way ie. 1, 2, 3, 5, ... instead of 1, 1, 2, 3, 5, ...
+                     */
+                    continue;
+                }
+                fibonacci[slots] = new Node(fibonacci[slots - 1].length + fibonacci[slots - 2].length);
+
+            }
+
+            Node[] rebalanceArray = new Node[slots];
+            Node curr;
+            int i = 0;
+            Stack<Node> stacky = new Stack<Node>();
             stacky.Push(root);
 
-            Node curr;
+            // Add all the nodes to the rebalance array.
+            //AddNodeToRebalanceArray(rebalanceArray, root, false);
 
             while (stacky.Count > 0)
             {
@@ -277,17 +307,69 @@ namespace Assn2 {
                 {
                     stacky.Push(curr.right);
                     stacky.Push(curr.left);
-                    
                 }
                 else
                 {
-                    
-                    
+                    rebalanceArray[i] = curr;
                 }
 
-            }*/
+            }
+
+            Node result = null;
+            // Concatinate all the node in the rebalance array.
+            for (int slot = 0; slot < slots; ++slot)
+            {
+                Node n = rebalanceArray[slot];
+                if (n != null)
+                {
+                    if(result == null) result = n; //track the leftmost root node
+
+                    for (int fib = 0; fib < slots; ++fib) //loop through to find the balanced spot for current node
+                    {
+                        if(n.length >= fibonacci[fib].length && n.length < fibonacci[fib+1].length) // if the length of result is in the interval of the current fibonacci number and the next one
+                        {
+                            if(fibonacci[fib].left==null) // if no other node is currently at that length
+                            {
+                                fibonacci[fib].left = n;
+                                break;
+                            }
+                            else //otherwise compress the nodes up to the next free fibonacci length
+                            {
+                                while(fib<slots) //continue looping through the fibonacci numbers, compressing until there's a free spot
+                                {
+                                    if (fibonacci[fib].left!=null)
+                                    {
+                                        n = Concatenate(fibonacci[fib].left, n); //compress, maintaining left to right order
+                                        fibonacci[fib].left = null; //reset reference
+                                        fib++; //iterate
+                                    }
+                                    else //otherwise node has found its place
+                                    {
+                                        fibonacci[fib].left=n;
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }    
+                }
+            }
+
+            for (int c = slots; c > 0; --c) // loop one last time (left to right)to concatenate all the smaller nodes in the array
+            {
+                    if (fibonacci[c].left != null)
+                    {
+                        result = Concatenate(result, fibonacci[c].left); //compress
+                    }
+             }
+
+
+
+            root = result;
 
             return null;
+
         }//: Rebalance the rope  using the algorithm found on pages 1319-1320 of Boehm et al.(9 marks).
     }
 }
