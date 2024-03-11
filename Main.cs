@@ -2,30 +2,56 @@
 
 namespace Assn2
 {
-    public class main
+    public class Program
     {
         static void Main()
         {
-            //Test constructor and PrintRope
-            Rope ropey = new Rope("This_is_a_rope._This_is_a_test_for_this_rope.");
-            ropey.PrintRope();
+            //Test constructor
+            Rope rope1 = new Rope("This_is_a_rope._This_is_a_test_for_this_rope.");
 
-            //Test ToString
-            Console.WriteLine("\n\n"+ropey.ToString());
+            //Test Insert
+            //rope1.Insert("Hi", 0);
+            //rope1.PrintRope();
+            //Console.WriteLine(rope1.ToString());
+
+            //Test Delete
+
+
+            //Test SubString
+
+
+            //Test Find
+            Console.WriteLine("'hello!' appears at index " + rope1.Find("hello!"));
 
             //Test CharAt
-            Console.WriteLine(ropey.CharAt(2));
+            Console.WriteLine(rope1.CharAt(50));
 
             //Test IndexOf
-            Console.WriteLine(ropey.IndexOf('i'));
+            Console.WriteLine("'z' appears at an index of: " + rope1.IndexOf('z'));
 
             //Test Reverse
-            ropey.Reverse();
-            Console.WriteLine(ropey.ToString());
+            rope1.Reverse();
+            Console.WriteLine("After reversal: \n" + rope1.ToString());
 
-            //Test Concatenate/rebalance
-            Rope ropey2 = new Rope("_Just_concatenating_this");
-            
+            //Test Length
+            Console.WriteLine("This rope is " + rope1.Length() + " characters long.");
+
+            //Test ToString
+            Console.WriteLine(rope1.ToString());
+
+            //Test PrintRope
+            rope1.PrintRope();
+
+            //Test Build
+
+
+            //Test Concatenate
+
+
+            //Test Split
+
+
+            //Test Rebalance
 
 
             Console.ReadLine();
