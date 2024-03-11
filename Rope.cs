@@ -66,13 +66,36 @@ namespace Assn2 {
           //(part of the constructor).
 
 
-        public void Insert(string S, int i)
+        public void Insert(string sequence, int i)
         {
+            if (i < 0 || i > root.length)
+            {
+                Console.WriteLine("Invalid index for insertion.");
+                return;
+            }
 
-        }//: Insert string S at index i (5 marks).
+            // Split at index i
+            var splitResult = Split(root, i);
+
+            // Concatenate the left part with the inserted sequence and then concatenate with the right part
+            root = Concatenate(Concatenate(splitResult.left, new Node(sequence.Length, sequence)), splitResult.right);
+        }
+
+
         public void Delete(int i, int j)
         {
+            if (root == null || i < 0 || j < 0 || i >= root.length || j >= root.length || i + j > root.length)
+            {
+                Console.WriteLine("Invalid deletion range.");
+                return;
+            }
 
+            // Split at i and i+j
+            var lhs = Split(root, i);
+            var rhs = Split(lhs.right, j);
+
+            // Concatenate the left and right parts
+            root = Concatenate(lhs.left, rhs.right);
         } //: Delete the substring S[i, j] (5 marks).
 
         public string Substring(int i, int j)
