@@ -1,10 +1,12 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 using System;
 using System.Collections;
 using System.Reflection.Emit;
 
-namespace Assn2 {
-    public class Rope {
+namespace Assn2
+{
+    public class Rope
+    {
 
 
         private class Node
@@ -214,7 +216,7 @@ namespace Assn2 {
             stacky.Push(root);
             Node curr = stacky.Pop();
 
-            while (curr  != null )
+            while (curr != null)
             {
                 if (curr.s == null)
                 {
@@ -224,7 +226,7 @@ namespace Assn2 {
                 else
                 {
                     int i;
-                    for (i=0; i < curr.length; i++)
+                    for (i = 0; i < curr.length; i++)
                     {
                         if (curr.s[i] == c)
                         {
@@ -305,13 +307,15 @@ namespace Assn2 {
 
             Node curr;
 
-            while (stacky.Count > 0 )
+            while (stacky.Count > 0)
             {
                 curr = stacky.Pop();
                 if (curr.s == null)
                 {
-                    stacky.Push(curr.right);
-                    stacky.Push(curr.left);
+                    if (curr.right != null)
+                        stacky.Push(curr.right);
+                    if (curr.left != null)
+                        stacky.Push(curr.left);
                 }
                 else
                 {
@@ -328,7 +332,7 @@ namespace Assn2 {
         {
             PrintRope(root, 0);
         }
-        
+
         // PrintRope(Node n, int index)
         // Purpose: Prints the augmented binary tree representation of the
         // current Rope.
@@ -348,7 +352,7 @@ namespace Assn2 {
                 PrintRope(n.left, index + 8);
             }
         }
-        
+
         // Concatenate(Node p, Node q)
         // Purpose: Returns a new Node which has a left property equivalent
         // to p, and a right property equivalent to q.
@@ -380,7 +384,7 @@ namespace Assn2 {
                 return newNode;
             }
             // Condition of searching the right child to find the node at index i.
-            if (i > p.left.length)
+            if (p.left != null && i > p.left.length)
             {
                 // Recurses the right subtree to find node p.
                 Node next = Split(p.right, i - p.left.length);
@@ -417,9 +421,9 @@ namespace Assn2 {
 
         private Node Rebalance()
         {
-            // algorithm is add nodes to a rabalance array, where a node at index n in the 
-            // rebalance array has Fibonacci(n+1) to Fibonacci(n+2) items, and the entire list has the nodes
-            // from largest to smallest and therefore left to right concatenated 
+            // The basic rebalancing algorithm is add nodes to a rabalance array, where a node at index K in the 
+            // rebalance array has Fibonacci(K+1) to Fibonacci(K+2) items, and the entire list has the nodes
+            // from largest to smallest concatenated.
 
             // create the aarray of nodes with length of the fibonacci numbers
             int slots = 0;
@@ -433,7 +437,7 @@ namespace Assn2 {
                     break;
                 }
                 slots++;
-                if(slots < 2)
+                if (slots < 2)
                 {
                     /*already added first two fibonacci numbers, 
                      * since algorithm uses fibonacci sequence that starts at 
@@ -442,7 +446,7 @@ namespace Assn2 {
                      */
                     continue;
                 }
-                fibonacci[slots] = new Node(fibonacci[slots - 1].length + fibonacci[slots - 2].length);
+                fibonacci.Add(new Node(fibonacci[slots - 1].length + fibonacci[slots - 2].length));
 
             }
 
@@ -452,14 +456,16 @@ namespace Assn2 {
             Stack<Node> stacky = new Stack<Node>();
             stacky.Push(root);
 
-            // Add all the nodes to the rebalance array
+            // Add all the nodes to the rebalance array.
+            //AddNodeToRebalanceArray(rebalanceArray, root, false);
+
             while (stacky.Count > 0)
             {
                 curr = stacky.Pop();
                 if (curr.s == null)
                 {
-                    stacky.Push(curr.right);
-                    stacky.Push(curr.left);
+                    if(curr.right != null) stacky.Push(curr.right);
+                    if(curr.left != null) stacky.Push(curr.left);
                 }
                 else
                 {
@@ -475,22 +481,22 @@ namespace Assn2 {
                 Node n = rebalanceArray[slot];
                 if (n != null)
                 {
-                    if(result == null) result = n; //track the leftmost root node
+                    if (result == null) result = n; //track the leftmost root node
 
                     for (int fib = 0; fib < slots; ++fib) //loop through to find the balanced spot for current node
                     {
-                        if(n.length >= fibonacci[fib].length && n.length < fibonacci[fib+1].length) // if the length of result is in the interval of the current fibonacci number and the next one
+                        if (n.length >= fibonacci[fib].length && n.length < fibonacci[fib + 1].length) // if the length of result is in the interval of the current fibonacci number and the next one
                         {
-                            if(fibonacci[fib].left==null) // if no other node is currently at that length
+                            if (fibonacci[fib].left == null) // if no other node is currently at that length
                             {
                                 fibonacci[fib].left = n;
                                 break;
                             }
                             else //otherwise compress the nodes up to the next free fibonacci length
                             {
-                                while(fib<slots) //continue looping through the fibonacci numbers, compressing until there's a free spot
+                                while (fib < slots) //continue looping through the fibonacci numbers, compressing until there's a free spot
                                 {
-                                    if (fibonacci[fib].left!=null)
+                                    if (fibonacci[fib].left != null)
                                     {
                                         n = Concatenate(fibonacci[fib].left, n); //compress, maintaining left to right order
                                         fibonacci[fib].left = null; //reset reference
@@ -498,24 +504,24 @@ namespace Assn2 {
                                     }
                                     else //otherwise node has found its place
                                     {
-                                        fibonacci[fib].left=n;
+                                        fibonacci[fib].left = n;
                                         break;
                                     }
                                 }
                             }
                             break;
                         }
-                    }    
+                    }
                 }
             }
 
             for (int c = slots; c > 0; --c) // loop one last time (left to right)to concatenate all the smaller nodes in the array
             {
-                    if (fibonacci[c].left != null)
-                    {
-                        result = Concatenate(result, fibonacci[c].left); //compress
-                    }
-             }
+                if (fibonacci[c].left != null)
+                {
+                    result = Concatenate(result, fibonacci[c].left); //compress
+                }
+            }
 
 
 
