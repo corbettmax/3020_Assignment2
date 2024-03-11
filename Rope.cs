@@ -76,31 +76,30 @@ namespace Assn2 {
 
             // Split at index i
             var splitResult = Split(root, i);
+            Rebalance();
 
             // Concatenate the left part with the inserted sequence and then concatenate with the right part
-            root = Concatenate(Concatenate(splitResult.left, new Node(sequence.Length, sequence)), splitResult.right);
-        }
-
-
+            Node newNode = Concatenate(new Node(sequence.Length, sequence), splitResult);
+            this.root = Concatenate(this.root, newNode);
+        } //: Insert string S at index i (5 marks).
         public void Delete(int i, int j)
         {
-            if (root == null || i < 0 || j < 0 || i >= root.length || j >= root.length || i + j > root.length)
-            {
-                Console.WriteLine("Invalid deletion range.");
-                return;
-            }
-
-            // Split at i and i+j
-            var lhs = Split(root, i);
-            var rhs = Split(lhs.right, j);
-
-            // Concatenate the left and right parts
-            root = Concatenate(lhs.left, rhs.right);
+            Node secondThird = Split(this.root, i - 1);
+            Rebalance();
+            Node thirdThird = Split(secondThird, j);
+            Rebalance();
+            this.root = Concatenate(this.root, thirdThird);
         } //: Delete the substring S[i, j] (5 marks).
 
         public string Substring(int i, int j)
         {
-            return "";
+            Node secondThird = Split(this.root, i);
+            Rebalance();
+            Node thirdThird = Split(secondThird, j);
+            Rebalance();
+
+            return thirdThird.ToString();
+
         } //: Return the substring S[i, j] (6 marks).
 
         public int Find(string S)
