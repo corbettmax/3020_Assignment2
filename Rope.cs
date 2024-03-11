@@ -162,7 +162,7 @@ namespace Assn2 {
             return -1;
         }//: Return the index of the first occurrence of S; -1 otherwise(9 marks).
 
-        public char CharAt(int i)  //: Return the character at index i (3 marks).
+        public char CharAt(int i)
         {
             Node current = root;
             int currIndex = i;
@@ -180,6 +180,12 @@ namespace Assn2 {
                     currIndex -= leftLength;
                     current = current.right;
                 }
+            }
+
+            if (currIndex < 0 || currIndex >= current.length)
+            {
+                Console.WriteLine("This index is not within the bounds of the string.");
+                return '\0';
             }
 
             return current.s[currIndex];
