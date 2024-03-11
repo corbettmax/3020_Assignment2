@@ -333,40 +333,55 @@ namespace Assn2 {
 
         }
 
+        // Split(Node p, int i)
+        // Purpose: Split the rope with root p at index i and return the root
+        // of the right subtree.
         private Node Split(Node p, int i)
         {
+            // Condition of finding the node at index i;
             if (p.s != null)
             {
+                // Splits the substring at index i and sets the children to be the substrings.
                 string firstHalf = p.s.Substring(0, i);
-                string secondHalf = p.s.Substring(i, p.length-i);
+                string secondHalf = p.s.Substring(i, p.length - i);
                 Node left = new Node(i, firstHalf);
                 Node right = new Node(p.length - 1, secondHalf);
+                // Creates and returns a parent node for the new subtrees.
                 Node newNode = Concatenate(left, right);
                 return newNode;
             }
+            // Condition of searching the right child to find the node at index i.
             if (i > p.length)
             {
+                // Recurses the right subtree to find node p.
                 Node next = Split(p.right, i - p.length);
+                // Split the current node by augmenting its data and creating a newNode.
                 Node newNode = new Node(p.right.length - next.length);
                 newNode.right = p.right.right;
                 newNode.left = p.right.left;
                 p.right = next;
+                // Returns the newly created Node that is split off.
                 return newNode;
             }
+            // Condition of searching the left child to find the node at index i.
             else if (i < p.length)
             {
+                // Recurses the left subtree to find Node p.
                 Node next = Split(p.left, i);
+                // Split the current node by augmenting its data and creating a newNode.
                 Node newNode = new Node(next.right.length);
                 newNode.right = next.right;
 
                 p.left = newNode;
                 next = next.left;
+                // Returns the augmented current node.
                 return next;
             }
+            // Returns the final root of the second tree.
+            // Sidenote: the original tree is now also edited to reflect the
+            // split, so there are now two unique trees.
             return p;
-
-
-        } //: Split the rope with root p at index i and return the root of the right subtree(9 marks).
+        }
 
         private Node Rebalance()
         {
