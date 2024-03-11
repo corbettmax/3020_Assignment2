@@ -217,7 +217,16 @@ namespace Assn2 {
                     }
                     currIndex += i;
                 }
-                curr = stacky.Pop();
+
+                if (stacky.Count == 0)
+                {
+                    Console.WriteLine("This character was not found in the array.");
+                    return -1;
+                }
+                else
+                {
+                    curr = stacky.Pop();
+                }
             }
 
             return -1;
