@@ -414,9 +414,9 @@ namespace Assn2 {
 
         private Node Rebalance()
         {
-            // The basic rebalancing algorithm is add nodes to a rabalance array, where a node at index K in the 
-            // rebalance array has Fibonacci(K+1) to Fibonacci(K+2) items, and the entire list has the nodes
-            // from largest to smallest concatenated.
+            // algorithm is add nodes to a rabalance array, where a node at index n in the 
+            // rebalance array has Fibonacci(n+1) to Fibonacci(n+2) items, and the entire list has the nodes
+            // from largest to smallest and therefore left to right concatenated 
 
             // create the aarray of nodes with length of the fibonacci numbers
             int slots = 0;
@@ -449,9 +449,7 @@ namespace Assn2 {
             Stack<Node> stacky = new Stack<Node>();
             stacky.Push(root);
 
-            // Add all the nodes to the rebalance array.
-            //AddNodeToRebalanceArray(rebalanceArray, root, false);
-
+            // Add all the nodes to the rebalance array
             while (stacky.Count > 0)
             {
                 curr = stacky.Pop();
