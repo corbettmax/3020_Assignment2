@@ -25,6 +25,9 @@ namespace Assn2 {
 
         private Node root { get; set; }
 
+        // Rope(string S)
+        // Purpose: Rope is the contructor for data types Rope. Creates a
+        // balanced Rope from a given string.
         public Rope(string S)
         {
             root = new Node(S.Length);
@@ -37,11 +40,11 @@ namespace Assn2 {
             root.left = Build(firstHalf, 0, Convert.ToInt32(Math.Floor(floored)));
 
             root.right = Build(secondHalf, Convert.ToInt32(Math.Floor(floored)), root.length);
+        }
 
-
-        }//: Create a balanced rope from a given string S (5 marks).
-
-
+        // Build(string s, int i, int j)
+        // Purpose: Build recursively constructs a balanced rope for S[i, j]
+        // and returns the root of the tree.
         private Node Build(string s, int i, int j)
         {
             if (j - i <= 10)
@@ -53,7 +56,6 @@ namespace Assn2 {
 
             double floored = n.length / 2;
 
-
             string firstHalf = s.Substring(0, Convert.ToInt32(Math.Floor(floored)));
             string secondHalf = s.Substring(Convert.ToInt32(Math.Floor(floored)));
 
@@ -61,11 +63,11 @@ namespace Assn2 {
             n.right = Build(secondHalf, Convert.ToInt32(Math.Floor(floored)), n.length);
 
             return n;
+        }
 
-        } //: Recursively build a balanced rope for S[i, j] and return its root
-          //(part of the constructor).
-
-
+        // Insert(string sequence, int i)
+        // Purpose: Inserts a string (sequence) at index i of the Rope by
+        // splitting the tree and concatenating the pieces in proper order.
         public void Insert(string sequence, int i)
         {
             if (i < 0 || i > root.length)
@@ -81,7 +83,11 @@ namespace Assn2 {
             // Concatenate the left part with the inserted sequence and then concatenate with the right part
             Node newNode = Concatenate(new Node(sequence.Length, sequence), splitResult);
             this.root = Concatenate(this.root, newNode);
-        } //: Insert string S at index i (5 marks).
+        }
+
+        // Delete(int i, int j)
+        // Purpose: Deletes the substring from index i to index j by splitting
+        // the tree twice and concatenating the first third and last third together.
         public void Delete(int i, int j)
         {
             Node secondThird = Split(this.root, i - 1);
@@ -89,8 +95,11 @@ namespace Assn2 {
             Node thirdThird = Split(secondThird, j);
             Rebalance();
             this.root = Concatenate(this.root, thirdThird);
-        } //: Delete the substring S[i, j] (5 marks).
+        }
 
+        // Substring(int i, int j)
+        // Purpose: Returns the substring of the rope from index i to index j
+        // by splitting the tree twice and taking the second third of the original rope.
         public string Substring(int i, int j)
         {
             Node secondThird = Split(this.root, i);
@@ -99,9 +108,11 @@ namespace Assn2 {
             Rebalance();
 
             return thirdThird.ToString();
+        }
 
-        } //: Return the substring S[i, j] (6 marks).
-
+        // Find(string s)
+        // Purpose: Returns the index of the first occurence of a substring in
+        // the Rope otherwise it returns -1.
         public int Find(string S)
         {
             char[] toFind = S.ToCharArray();
@@ -160,8 +171,11 @@ namespace Assn2 {
                 }
             }
             return -1;
-        }//: Return the index of the first occurrence of S; -1 otherwise(9 marks).
+        }
 
+        // CharAt(int i)
+        // Purpose: Returns the char at index i of the Rope otherwise returns a
+        // null terminator if the index is not in the rope.
         public char CharAt(int i)
         {
             Node current = root;
@@ -181,15 +195,17 @@ namespace Assn2 {
                     current = current.right;
                 }
             }
-
             if (currIndex < 0 || currIndex >= current.length)
             {
                 Console.WriteLine("This index is not within the bounds of the string.");
                 return '\0';
             }
-
             return current.s[currIndex];
         }
+
+        // IndexOf(char c)
+        // Purpose: Returns the index of the first occurence of a character c,
+        // otherwise returns -1 if the char is not in the Rope.
         public int IndexOf(char c)
         {
             Stack<Node> stacky = new Stack<Node>();
@@ -199,7 +215,7 @@ namespace Assn2 {
             Node curr = stacky.Pop();
 
             while (curr  != null )
-        {
+            {
                 if (curr.s == null)
                 {
                     stacky.Push(curr.right);
@@ -217,7 +233,6 @@ namespace Assn2 {
                     }
                     currIndex += i;
                 }
-
                 if (stacky.Count == 0)
                 {
                     Console.WriteLine("This character was not found in the array.");
@@ -228,20 +243,22 @@ namespace Assn2 {
                     curr = stacky.Pop();
                 }
             }
-
             return -1;
+        }
 
-
-        }//: Return the index of the first occurrence of character c (4 marks).
-
+        // Reverse()
+        // Purpose: Takes a Rope as input and augments the Rope to represent
+        // the reverse of its string.
         public void Reverse()
         {
+            // Create a stack and push the root onto the top
             Stack<Node> stacky = new Stack<Node>();
             Node temp;
             Node curr;
 
             stacky.Push(root);
 
+            // Traverse the entire tree from right to left and swaps the leaf nodes.
             while (stacky.Count > 0)
             {
                 curr = stacky.Pop();
@@ -262,22 +279,23 @@ namespace Assn2 {
                     {
                         newStr += curr.s[i];
                     }
-
                     curr.s = newStr;
-                    
                 }
-
             }
             return;
+        }
 
-        }//: Reverse the string represented by the current rope (5 marks).
-
+        // Length()
+        // Purpose: Returns the total length of the string by accessing the
+        // length of the root node.
         public int Length()
         {
             return root.length;
+        }
 
-        }//: Return the length of the string (1 mark).
-
+        // ToString()
+        // Purpose: Returns the string representation of the Rope by traversing
+        // the tree right to left and addign every leaf node to a stack.
         public string ToString()
         {
             Stack<Node> stacky = new Stack<Node>();
@@ -299,19 +317,21 @@ namespace Assn2 {
                 {
                     toReturn += curr.s;
                 }
-                
             }
-
             return toReturn;
+        }
 
-        }//: Return the string represented by the current rope (4 marks).
-
+        // PrintRope()
+        // Purpose: Wrapper function of PrintRope(Node n, int index) which
+        // prints the augmented binary tree representation of the current Rope.
         public void PrintRope()
         {
             PrintRope(root, 0);
-
-        }//: Print the augmented binary tree of the current rope (4 marks).
-
+        }
+        
+        // PrintRope(Node n, int index)
+        // Purpose: Prints the augmented binary tree representation of the
+        // current Rope.
         private void PrintRope(Node n, int index)
         {
             if (n != null)
@@ -328,11 +348,11 @@ namespace Assn2 {
                 PrintRope(n.left, index + 8);
             }
         }
-
-
-
-        //The public methods are strongly supported by the following (and indispensible) private methods.
-        private Node Concatenate(Node p, Node q)  //: Return the root of the rope constructed by concatenating tworopes with roots p and q (3 marks).
+        
+        // Concatenate(Node p, Node q)
+        // Purpose: Returns a new Node which has a left property equivalent
+        // to p, and a right property equivalent to q.
+        private Node Concatenate(Node p, Node q)
         {
             Node n = new Node(p.length + q.length);
             n.right = q;
