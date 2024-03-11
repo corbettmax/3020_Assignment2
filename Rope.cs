@@ -330,7 +330,37 @@ namespace Assn2 {
 
         private Node Split(Node p, int i)
         {
-            return null;
+            if (p.s != null)
+            {
+                string firstHalf = p.s.Substring(0, i);
+                string secondHalf = p.s.Substring(i, p.length-i);
+                Node left = new Node(i, firstHalf);
+                Node right = new Node(p.length - 1, secondHalf);
+                Node newNode = Concatenate(left, right);
+                return newNode;
+            }
+            if (i > p.length)
+            {
+                Node next = Split(p.right, i - p.length);
+                Node newNode = new Node(p.right.length - next.length);
+                newNode.right = p.right.right;
+                newNode.left = p.right.left;
+                p.right = next;
+                return newNode;
+            }
+            else if (i < p.length)
+            {
+                Node next = Split(p.left, i);
+                Node newNode = new Node(next.right.length);
+                newNode.right = next.right;
+
+                p.left = newNode;
+                next = next.left;
+                return next;
+            }
+            return p;
+
+
         } //: Split the rope with root p at index i and return the root of the right subtree(9 marks).
 
         private Node Rebalance()
