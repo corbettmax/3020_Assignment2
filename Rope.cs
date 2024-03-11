@@ -82,36 +82,86 @@ namespace Assn2 {
 
         public int Find(string S)
         {
-            int len = S.Length;
+            char[] toFind = S.ToCharArray();
+            List<int> indices = new List<int>();
+            Stack<Node> stacky = new Stack<Node>();
+            int currIndex = 0;
 
-            if (len > root.length) return -1;
+            stacky.Push(root);
 
+            while (stacky.Count > 0)
+            {
+                Node curr = stacky.Pop();
+
+                if (curr.s == null)
+                {
+                    int leftLength = curr.left != null ? curr.left.length : 0;
+
+                    if (currIndex < leftLength)
+                    {
+                        stacky.Push(curr.right);
+                        stacky.Push(curr.left);
+                    }
+                    else
+                    {
+                        currIndex -= leftLength;
+                        stacky.Push(curr.right);
+                    }
+                }
+                else
+                {
+                    int i;
+                    for (i = 0; i < curr.length; i++)
+                    {
+                        if (curr.s[i] == toFind[0])
+                        {
+                            indices.Add(currIndex + i);
+                        }
+                    }
+                    currIndex += i;
+                }
+            }
+
+            for (int i = 0; i < indices.Count; i++)
+            {
+                int foundCount = 1;
+                for (int j = 1; j < toFind.Length; j++)
+                {
+                    if (CharAt(indices[i] + j) == toFind[j])
+                    {
+                        foundCount++;
+                        if (foundCount == toFind.Length)
+                        {
+                            return indices[i];
+                        }
+                    }
+                }
+            }
             return -1;
-
         }//: Return the index of the first occurrence of S; -1 otherwise(9 marks).
 
         public char CharAt(int i)  //: Return the character at index i (3 marks).
         {
             Node current = root;
             int currIndex = i;
-    
-        while (current.length > 10)
+
+            while (current.s == null)
             {
-                if (i > current.left.length)
+                int leftLength = current.left != null ? current.left.length : 0;
+
+                if (currIndex < leftLength)
                 {
-                    currIndex = currIndex - current.left.length;
-                    current = current.right;
+                    current = current.left;
                 }
                 else
                 {
-                    current = current.left;
+                    currIndex -= leftLength;
+                    current = current.right;
                 }
             }
 
             return current.s[currIndex];
-
         }
-
         public int IndexOf(char c)
         {
             Stack<Node> stacky = new Stack<Node>();
