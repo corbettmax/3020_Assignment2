@@ -374,21 +374,22 @@ namespace Assn2 {
                 string firstHalf = p.s.Substring(0, i);
                 string secondHalf = p.s.Substring(i, p.length - i);
                 Node left = new Node(i, firstHalf);
-                Node right = new Node(p.length - 1, secondHalf);
+                Node right = new Node(p.length - i, secondHalf);
                 // Creates and returns a parent node for the new subtrees.
                 Node newNode = Concatenate(left, right);
                 return newNode;
             }
             // Condition of searching the right child to find the node at index i.
-            if (i > p.length)
+            if (i > p.left.length)
             {
                 // Recurses the right subtree to find node p.
-                Node next = Split(p.right, i - p.length);
+                Node next = Split(p.right, i - p.left.length);
                 // Split the current node by augmenting its data and creating a newNode.
-                Node newNode = new Node(p.right.length - next.length);
-                newNode.right = p.right.right;
+                Node newNode = new Node(next.right.length);
+                newNode.right = next.right;
                 newNode.left = p.right.left;
-                p.right = next;
+                next.right = null;
+                p.right = next.left;
                 // Returns the newly created Node that is split off.
                 return newNode;
             }
@@ -399,10 +400,12 @@ namespace Assn2 {
                 Node next = Split(p.left, i);
                 // Split the current node by augmenting its data and creating a newNode.
                 Node newNode = new Node(next.right.length);
-                newNode.right = next.right;
+                newNode.left = next.left;
+                newNode.right = p.right;
+                newNode.length += newNode.right.length;
 
-                p.left = newNode;
-                next = next.left;
+                p.right = null;
+                p.length = p.left.length;
                 // Returns the augmented current node.
                 return next;
             }
